@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import RPi.GPIO as GPIO
+
 import subprocess
 import time
 import sys
@@ -16,16 +16,11 @@ except Exception:
     print("bad time")
     quit()
 
-PIN = 3
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(PIN, GPIO.OUT)
-subprocess.call("node /home/pi/Documents/water_projects/start_water.js",shell=True)
-time.sleep(2)
-GPIO.output(PIN, False)
+subprocess.call("sudo sh -c \"echo -n \"1-1\" > /sys/bus/usb/drivers/usb/bind\"",shell=True)
 print("giving water for", pump_time, "sec...")
 time.sleep(pump_time)
 print(pump_time, "secs have passed")
-GPIO.output(PIN, True)
+subprocess.call("sudo sh -c \"echo -n \"1-1\" > /sys/bus/usb/drivers/usb/unbind\"",shell=True)
 print("giving water finished.")
 subprocess.call("node /home/pi/Documents/water_projects/end_water.js",shell=True)
 """
